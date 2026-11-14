@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Deepak Singh Rathore | AI & Machine Learning Developer</title>
+  <meta name="description" content="Portfolio of Deepak Singh Rathore - AI/ML Developer specializing in Machine Learning, Deep Learning, Computer Vision, RAG, and NLP.">
+  <meta name="author" content="Deepak Singh Rathore">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Deepak Singh Rathore | AI/ML Developer">
+  <meta property="og:description" content="B.Tech CS (Quantum University) • ML Intern @ Samatrix25 & Internshala • Computer Vision & GenAI Developer">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts: Space Grotesk, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Three.js CDN for 3D Canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            body: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            cyber: {
+              blue: '#00f0ff',
+              purple: '#8a2be2',
+              pink: '#ff007f',
+              dark: '#05070e',
+              card: '#0a0f1d',
+              border: '#162238'
+            },
+            brand: {
+              50: '#eef6ff',
+              100: '#d9ebff',
+              400: '#38bdf8',
+              500: '#0284c7',
+              600: '#2563eb',
+              700: '#1d4ed8'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #05070e;
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5, .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* 3D Canvas Container */
+    #canvas3d {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    /* 3D Card Hover Perspective */
+    .tilt-card {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.2s ease;
+    }
+    .tilt-card:hover {
+      box-shadow: 0 20px 40px -15px rgba(0, 240, 255, 0.15), 0 0 20px 0 rgba(138, 43, 226, 0.1);
+    }
+    .tilt-inner {
+      transform: translateZ(25px);
+    }
+
+    /* Cyber Glows */
+    .glow-cyan {
+      box-shadow: 0 0 35px -5px rgba(0, 240, 255, 0.35);
+    }
+    .glow-purple {
+      box-shadow: 0 0 35px -5px rgba(138, 43, 226, 0.35);
+    }
+    .glow-text-cyan {
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    }
+
+    /* Glass Panels */
+    .glass-panel {
+      background: rgba(10, 15, 29, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(30, 41, 59, 0.8);
+    }
+    .glass-nav {
+      background: rgba(5, 7, 14, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(22, 34, 56, 0.8);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #05070e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00f0ff;
+    }
+
+    /* Print Styles */
+    @media print {
+      #canvas3d, .no-print, nav, footer, #commandPalette, #toast { display: none !important; }
+      body { background: white !important; color: black !important; }
+      .glass-panel { background: white !important; border: 1px solid #ccc !important; box-shadow: none !important; color: black !important; }
+    }
+  </style>
+</head>
+<body class="selection:bg-cyan-500 selection:text-black">
+
+  <!-- 3D WebGL Canvas Layer -->
+  <div id="canvas3d"></div>
+
+  <!-- Scroll Progress Indicator -->
+  <div id="progressBar" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500 z-50 w-0 transition-all duration-75 no-print"></div>
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="sticky top-0 z-40 glass-nav no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Status -->
+      <a href="#" class="flex items-center gap-3.5 group">
+        <div class="relative w-10 h-10 rounded-xl overflow-hidden ring-2 ring-cyan-500/50 shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform bg-slate-900">
+          <img src="data:image/jpeg;base64,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" alt="Deepak Singh Rathore" class="w-full h-full object-cover object-top">
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-950"></span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-heading font-bold text-base tracking-tight text-white group-hover:text-cyan-400 transition-colors">Deepak Singh Rathore</span>
+            <span class="hidden sm:inline-flex px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">AI/ML</span>
+          </div>
+          <span class="text-[11px] text-slate-400 font-mono block">Quantum Univ. '27 • Samatrix25 • Internshala</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-1 text-xs font-semibold text-slate-300">
+        <a href="#about" class="px-3 py-1.5 rounded-lg hover:text-cyan-400 hover:bg-slate-800/50 transition-colors">About</a>
+        <a href="#experience" class="px-3 py-1.5 rounded-lg hover:text-cyan-400 hover:bg-slate-800/50 transition-colors">Experience</a>
+        <a href="#projects" class="px-3 py-1.5 rounded-lg hover:text-cyan-400 hover:bg-slate-800/50 transition-colors">Projects</a>
+        <a href="#demos" class="px-3 py-1.5 rounded-lg text-cyan-400 hover:text-cyan-300 hover:bg-cyan-950/40 border border-cyan-500/30 transition-colors flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+          3D Interactive Lab
+        </a>
+        <a href="#skills" class="px-3 py-1.5 rounded-lg hover:text-cyan-400 hover:bg-slate-800/50 transition-colors">Skills</a>
+        <a href="#achievements" class="px-3 py-1.5 rounded-lg hover:text-cyan-400 hover:bg-slate-800/50 transition-colors">Hackathons</a>
+        <a href="#contact" class="px-3 py-1.5 rounded-lg hover:text-cyan-400 hover:bg-slate-800/50 transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Utilities -->
+      <div class="flex items-center gap-2.5">
+        
+        <!-- Command Search (Ctrl+K) -->
+        <button onclick="toggleCommandPalette()" class="hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-xs text-slate-400 hover:text-white hover:border-cyan-500/50 transition-colors" title="Press Ctrl+K">
+          <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span>Search</span>
+          <kbd class="px-1 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-400">⌘K</kbd>
+        </button>
+
+        <!-- Direct CTA -->
+        <a href="#contact" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-heading font-bold text-xs transition-all shadow-md shadow-cyan-500/25 flex items-center gap-1.5">
+          <span>Hire Me</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+        <!-- Mobile Menu -->
+        <button id="mobileBtn" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Nav Dropdown -->
+    <div id="mobileMenu" class="hidden md:hidden px-4 py-4 space-y-2 bg-[#0a0f1d] border-b border-slate-800 text-sm font-medium">
+      <a href="#about" class="block py-1.5 hover:text-cyan-400">About</a>
+      <a href="#experience" class="block py-1.5 hover:text-cyan-400">Experience (Samatrix25 & Internshala)</a>
+      <a href="#projects" class="block py-1.5 hover:text-cyan-400">Projects (Legal AI, Elections, RCT, House Price)</a>
+      <a href="#demos" class="block py-1.5 text-cyan-400">3D Interactive AI Lab</a>
+      <a href="#skills" class="block py-1.5 hover:text-cyan-400">Technical Skills</a>
+      <a href="#achievements" class="block py-1.5 hover:text-cyan-400">Hackathon Achievements</a>
+      <a href="#contact" class="block py-1.5 text-cyan-400 font-bold">Contact Deepak</a>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION WITH 3D INTERACTION ================= -->
+  <section class="relative pt-12 pb-24 md:pt-20 md:pb-32 overflow-hidden z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top Live Status Row -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-8 text-xs font-mono border-b border-slate-800/80 mb-10">
+        <div class="flex items-center gap-2.5">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400"></span>
+          </span>
+          <span class="text-slate-300 font-semibold">Open to AI/ML Developer Roles & Internships</span>
+        </div>
+        <div class="flex items-center gap-4 text-slate-400">
+          <span>📍 Roorkee & Alwar, India</span>
+          <span class="hidden sm:inline">•</span>
+          <span id="liveClock" class="text-cyan-300">IST 11:15 AM (UTC+5:30)</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left: Headline & Pitch -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono font-medium text-cyan-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>AI / Machine Learning Developer • Computer Vision</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-6xl font-black font-heading tracking-tight text-white leading-[1.1]">
+            Engineering Next-Gen <br>
+            <span class="bg-gradient-to-r from-cyan-400 via-indigo-400 to-pink-500 bg-clip-text text-transparent glow-text-cyan">
+              Intelligent AI & Vision Systems
+            </span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+            I’m <strong class="text-white font-bold">Deepak Singh Rathore</strong>, a Computer Science & AI Developer at 
+            <strong class="text-cyan-400 font-semibold">Quantum University</strong>. Hands-on experience developing 
+            <span class="text-white font-medium">Generative AI Legal Assistants</span>, 
+            <span class="text-white font-medium">Blind Vision Assistance Systems (OpenCV/YOLO)</span>, 
+            <span class="text-white font-medium">Clinical Trial RCT Analytics</span>, and 
+            <span class="text-white font-medium">Predictive Supervised ML Classifiers</span>.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap items-center gap-3.5 pt-2">
+            <a href="#projects" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-heading font-extrabold text-sm shadow-lg shadow-cyan-500/25 hover:scale-[1.02] transition-all flex items-center gap-2">
+              <span>View 5 Core Projects</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+
+            <a href="#demos" class="px-5 py-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-cyan-300 font-heading font-bold text-sm hover:scale-[1.02] transition-all flex items-center gap-2 shadow-sm">
+              <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>Launch 3D Lab</span>
+            </a>
+
+            <button onclick="window.print()" class="px-4 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs font-mono font-medium transition-colors flex items-center gap-2" title="Print or Save Resume as PDF">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+              <span>Resume Dossier</span>
+            </button>
+          </div>
+
+          <!-- Highlight Metric Stats -->
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 font-mono">
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-white font-heading">5+</div>
+              <div class="text-[11px] text-slate-400">Shipped Projects</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400 font-heading">2x</div>
+              <div class="text-[11px] text-slate-400">ML Internships</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-pink-400 font-heading">36h</div>
+              <div class="text-[11px] text-slate-400">National Hackathons</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: 3D Holographic Identity Card -->
+        <div class="lg:col-span-5">
+          <div class="tilt-card p-1 rounded-3xl bg-gradient-to-tr from-cyan-500/40 via-purple-500/20 to-pink-500/40 glow-cyan">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6 tilt-inner">
+              
+              <!-- Profile Header -->
+              <div class="flex items-center gap-4">
+                <div class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden ring-2 ring-cyan-400/80 shadow-2xl flex-shrink-0 bg-slate-900">
+                  <img src="data:image/jpeg;base64,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" alt="Deepak Singh Rathore" class="w-full h-full object-cover object-top">
+                  <span class="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 ring-2 ring-slate-900"></span>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <h3 class="font-heading font-extrabold text-xl text-white truncate">Deepak Singh Rathore</h3>
+                    <svg class="w-4 h-4 text-cyan-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                  </div>
+                  <p class="text-xs text-cyan-400 font-mono font-medium mt-0.5">AI/ML Developer</p>
+                  <p class="text-xs text-slate-400 font-mono mt-1">B.Tech CS • Quantum Univ. (2023-2027)</p>
+                </div>
+              </div>
+
+              <!-- Terminal Details Box -->
+              <div class="p-3.5 rounded-xl bg-black/60 border border-slate-800 text-xs font-mono space-y-2">
+                <div class="flex justify-between text-slate-400">
+                  <span class="text-slate-500">primary_lang:</span>
+                  <span class="text-cyan-300 font-bold">Python, C</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                  <span class="text-slate-500">core_frameworks:</span>
+                  <span class="text-slate-200">TensorFlow, Scikit-learn, OpenCV</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                  <span class="text-slate-500">email:</span>
+                  <span class="text-slate-200 select-all">deepaksrathore08@gmail.com</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                  <span class="text-slate-500">phone:</span>
+                  <span class="text-slate-200">+91-8079085251</span>
+                </div>
+              </div>
+
+              <!-- Skill Badges -->
+              <div class="flex flex-wrap gap-1.5 text-[11px] font-mono">
+                <span class="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">OpenCV</span>
+                <span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20">TensorFlow</span>
+                <span class="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20">Streamlit</span>
+                <span class="px-2 py-0.5 rounded bg-pink-500/10 text-pink-300 border border-pink-500/20">YOLO</span>
+                <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">FastAPI</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">Groq & OpenAI</span>
+              </div>
+
+              <!-- Connect Row -->
+              <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs">
+                <button onclick="copyEmail()" class="text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors font-mono">
+                  <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  <span id="copyStatus">Copy Email</span>
+                </button>
+                <a href="#contact" class="font-bold text-cyan-400 hover:underline">Get in Touch &rarr;</a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= ABOUT & SUMMARY ================= -->
+  <section id="about" class="py-20 border-t border-slate-800/80 bg-slate-950/60 z-10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mx-auto text-center space-y-3 mb-16">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Core Profile</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Executive Summary</h2>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Enthusiastic AI/ML Developer with hands-on experience in Machine Learning, Deep Learning, and Computer Vision projects. Proficient in Python, OpenCV, TensorFlow, PyTorch, and data analysis. Developed AI-based projects including blind vision assistant systems and intelligent chatbots.
+        </p>
+      </div>
+
+      <!-- 3 Pillars based on resume -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-4 hover:border-cyan-500/50 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center font-bold text-xl">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-white">Computer Vision & Blind Assistance</h3>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            Proficient in OpenCV, YOLO, and CNNs. Engineered real-time assistive intelligence including vision systems that detect objects and hurdles to guide visually impaired individuals.
+          </p>
+        </div>
+
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-4 hover:border-purple-500/50 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center justify-center font-bold text-xl">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-white">Generative AI & Intelligent Chatbots</h3>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            Built production NLP chatbots and legal assistants using Streamlit, Groq, Claude, and OpenAI APIs with domain grounding, prompt structuring, and low-latency response generation.
+          </p>
+        </div>
+
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-4 hover:border-pink-500/50 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 text-pink-400 flex items-center justify-center font-bold text-xl">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-white">Statistical Modeling & Supervised ML</h3>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+            Expertise in Decision Trees, Random Forests, multi-variable Regression, Clustering, and Randomized Controlled Trial (RCT) biostatistics using Scikit-Learn, Pandas, and SciPy.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= WORK EXPERIENCE ================= -->
+  <section id="experience" class="py-20 border-t border-slate-800/80 z-10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mx-auto text-center space-y-2 mb-16">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Industry Internships</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Professional Experience</h2>
+      </div>
+
+      <div class="max-w-4xl mx-auto space-y-8 relative before:absolute before:inset-0 before:left-8 md:before:left-1/2 before:-ml-px before:w-0.5 before:bg-slate-800">
+        
+        <!-- Experience 1: Samatrix25 -->
+        <div class="relative flex flex-col md:flex-row items-start group">
+          <div class="flex items-center md:w-1/2 md:pr-12 md:text-right mb-4 md:mb-0">
+            <div class="w-full">
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-2">
+                June 2025 • Online
+              </span>
+              <h3 class="text-xl font-bold text-white">Data Science and ML Intern</h3>
+              <p class="text-sm font-semibold text-cyan-400">Samatrix25</p>
+            </div>
+          </div>
+          
+          <div class="absolute left-8 md:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-cyan-500 text-black flex items-center justify-center font-bold text-xs shadow-lg shadow-cyan-500/50 z-10">
+            ML
+          </div>
+
+          <div class="md:w-1/2 md:pl-12 pl-16">
+            <div class="p-6 rounded-2xl glass-panel space-y-3">
+              <ul class="text-xs sm:text-sm text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                <li>Performed comprehensive <strong>data cleaning, exploratory data analysis (EDA), and data visualization</strong> across multi-dimensional feature sets.</li>
+                <li>Applied supervised machine learning models for <strong>predictive analysis</strong>, fine-tuning hyperparameters for optimal validation scores.</li>
+                <li>Leveraged Pandas, NumPy, Matplotlib, and Seaborn for robust feature pipelines.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 2: Internshala -->
+        <div class="relative flex flex-col md:flex-row-reverse items-start group">
+          <div class="flex items-center md:w-1/2 md:pl-12 mb-4 md:mb-0">
+            <div class="w-full">
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-mono font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-2">
+                Aug 2024 – Oct 2024 • Online
+              </span>
+              <h3 class="text-xl font-bold text-white">Python Programming Intern</h3>
+              <p class="text-sm font-semibold text-purple-400">Internshala</p>
+            </div>
+          </div>
+          
+          <div class="absolute left-8 md:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold text-xs shadow-lg shadow-purple-500/50 z-10">
+            PY
+          </div>
+
+          <div class="md:w-1/2 md:pr-12 pl-16 md:pl-0 md:text-right">
+            <div class="p-6 rounded-2xl glass-panel space-y-3">
+              <ul class="text-xs sm:text-sm text-slate-300 space-y-2 list-disc pl-4 md:list-none md:pl-0 leading-relaxed">
+                <li>Engineered core Python applications focusing on <strong>Object-Oriented Programming (OOPS)</strong>, modular architecture, and file handling.</li>
+                <li>Designed high-efficiency algorithms focusing on algorithmic logic building, edge case testing, and clean software architecture.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= EDUCATION SECTION ================= -->
+  <section class="py-16 border-t border-slate-800/80 bg-slate-950/40 z-10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mx-auto text-center space-y-2 mb-12">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Academics</span>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight">Education</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        
+        <!-- College -->
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-3 border-l-4 border-cyan-400">
+          <span class="text-xs font-mono text-cyan-400">Aug. 2023 – Aug. 2027</span>
+          <h3 class="text-lg font-bold text-white">Bachelor of Technology in Computer Science</h3>
+          <p class="text-sm font-semibold text-slate-300">Quantum University, Roorkee</p>
+          <p class="text-xs text-slate-400">Roorkee, Uttarakhand, India</p>
+          <div class="pt-2 flex flex-wrap gap-1.5 text-[10px] font-mono">
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Machine Learning</span>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Computer Vision</span>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Data Structures</span>
+          </div>
+        </div>
+
+        <!-- School -->
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-3 border-l-4 border-purple-400">
+          <span class="text-xs font-mono text-purple-400">April 2020 – March 2021</span>
+          <h3 class="text-lg font-bold text-white">High School</h3>
+          <p class="text-sm font-semibold text-slate-300">Raath International School Alwar</p>
+          <p class="text-xs text-slate-400">Alwar, Rajasthan, India</p>
+          <div class="pt-2 flex flex-wrap gap-1.5 text-[10px] font-mono">
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Mathematics & Science</span>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Foundational Logic</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FEATURED PROJECTS (ALL 5 FROM RESUME) ================= -->
+  <section id="projects" class="py-20 border-t border-slate-800/80 z-10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div>
+          <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Engineered Software</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-1">Featured Projects</h2>
+        </div>
+        
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap gap-2 text-xs font-semibold" id="projectFilter">
+          <button data-filter="all" class="filter-btn active px-3.5 py-1.5 rounded-lg bg-cyan-500 text-black font-bold">All Projects (5)</button>
+          <button data-filter="genai" class="filter-btn px-3.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">GenAI & NLP</button>
+          <button data-filter="ml" class="filter-btn px-3.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">Machine Learning</button>
+          <button data-filter="stats" class="filter-btn px-3.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700">RCT & Stats</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Project 1: Legal Assistant for Law -->
+        <div class="project-card tilt-card rounded-2xl glass-panel overflow-hidden flex flex-col justify-between" data-category="genai">
+          <div>
+            <div class="h-44 bg-gradient-to-br from-indigo-950 via-slate-900 to-cyan-950 p-6 flex flex-col justify-between relative overflow-hidden">
+              <div class="flex justify-between items-start z-10">
+                <span class="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">27 April 2025</span>
+                <span class="text-xs font-mono text-slate-400">Streamlit UI</span>
+              </div>
+              <div class="z-10">
+                <span class="text-xs text-cyan-400 font-mono font-medium">NLP & Generative AI</span>
+                <h3 class="text-xl font-bold text-white tracking-tight">Legal Assistant for Law</h3>
+              </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Developed an AI-based legal assistant using Natural Language Processing and Generative AI. Built an interactive, intuitive UI using <strong>Streamlit</strong> for legal query resolution.
+              </p>
+
+              <div class="space-y-1.5 pt-2 border-t border-slate-800 text-xs text-slate-400 font-mono">
+                <div>• NLP query parsing & prompt orchestration</div>
+                <div>• Grounded legal knowledge retrieval</div>
+                <div>• Streamlit interactive chat interface</div>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5 pt-2 text-[11px] font-mono">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-cyan-300">Python</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Streamlit</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Generative AI</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">NLP</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0 border-t border-slate-800/80 flex items-center justify-between mt-4">
+            <a href="#demo-legal" class="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+              Launch Live Simulator &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 2: Indian Election -->
+        <div class="project-card tilt-card rounded-2xl glass-panel overflow-hidden flex flex-col justify-between" data-category="ml">
+          <div>
+            <div class="h-44 bg-gradient-to-br from-amber-950 via-slate-900 to-orange-950 p-6 flex flex-col justify-between relative overflow-hidden">
+              <div class="flex justify-between items-start z-10">
+                <span class="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">June 2025</span>
+                <span class="text-xs font-mono text-slate-400">Predictive ML</span>
+              </div>
+              <div class="z-10">
+                <span class="text-xs text-amber-400 font-mono font-medium">Supervised Classifiers</span>
+                <h3 class="text-xl font-bold text-white tracking-tight">Indian Election Outcome Model</h3>
+              </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Applied machine learning algorithms including <strong>Decision Tree</strong> and <strong>Random Forest</strong> to model electoral demographics, historic voting trends, and voter turnout patterns.
+              </p>
+
+              <div class="space-y-1.5 pt-2 border-t border-slate-800 text-xs text-slate-400 font-mono">
+                <div>• Decision Tree & Random Forest ensembling</div>
+                <div>• Demographic & constituency feature mapping</div>
+                <div>• Confusion matrix & classification report</div>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5 pt-2 text-[11px] font-mono">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-amber-300">Python</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Random Forest</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Decision Tree</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0 border-t border-slate-800/80 flex items-center justify-between mt-4">
+            <span class="text-xs font-mono text-slate-400">Classification Suite</span>
+            <a href="#demos" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">
+              Explore in Lab &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 3: Clinical Trial (RCT) -->
+        <div class="project-card tilt-card rounded-2xl glass-panel overflow-hidden flex flex-col justify-between" data-category="stats">
+          <div>
+            <div class="h-44 bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 p-6 flex flex-col justify-between relative overflow-hidden">
+              <div class="flex justify-between items-start z-10">
+                <span class="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">July 2025</span>
+                <span class="text-xs font-mono text-slate-400">Biostatistics</span>
+              </div>
+              <div class="z-10">
+                <span class="text-xs text-emerald-400 font-mono font-medium">Randomized Controlled Trial</span>
+                <h3 class="text-xl font-bold text-white tracking-tight">Clinical Trial RCT Analysis</h3>
+              </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Comprehensive study design modeling a <strong>Randomized Controlled Trial (RCT)</strong>. Rigorously evaluated <strong>Control vs Treatment groups</strong> with statistical hypothesis testing and efficacy estimation.
+              </p>
+
+              <div class="space-y-1.5 pt-2 border-t border-slate-800 text-xs text-slate-400 font-mono">
+                <div>• Control vs Treatment cohort isolation</div>
+                <div>• Two-sample hypothesis testing (p &lt; 0.05)</div>
+                <div>• Biostatistical efficacy validation</div>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5 pt-2 text-[11px] font-mono">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-emerald-300">Python</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">RCT Study Design</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">SciPy</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0 border-t border-slate-800/80 flex items-center justify-between mt-4">
+            <a href="#demo-rct" class="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+              Launch RCT Lab &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 4: House Price Prediction -->
+        <div class="project-card tilt-card rounded-2xl glass-panel overflow-hidden flex flex-col justify-between" data-category="ml">
+          <div>
+            <div class="h-44 bg-gradient-to-br from-blue-950 via-slate-900 to-sky-950 p-6 flex flex-col justify-between relative overflow-hidden">
+              <div class="flex justify-between items-start z-10">
+                <span class="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">Sept 2025</span>
+                <span class="text-xs font-mono text-slate-400">Regression</span>
+              </div>
+              <div class="z-10">
+                <span class="text-xs text-blue-400 font-mono font-medium">Scikit-Learn Supervised</span>
+                <h3 class="text-xl font-bold text-white tracking-tight">House Price Prediction</h3>
+              </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Implemented supervised learning regression algorithms for residential price valuation. Performed thorough data preprocessing, outlier clipping, feature engineering, and cross-validation.
+              </p>
+
+              <div class="space-y-1.5 pt-2 border-t border-slate-800 text-xs text-slate-400 font-mono">
+                <div>• Linear, Ridge, & Tree Regression</div>
+                <div>• Multi-feature transformation & scaling</div>
+                <div>• RMSE, MAE, & R² score evaluation</div>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5 pt-2 text-[11px] font-mono">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-blue-300">Python</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Scikit-learn</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Regression</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0 border-t border-slate-800/80 flex items-center justify-between mt-4">
+            <a href="#demo-house" class="text-xs font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1">
+              Estimate House Price &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 5: IPL Stats -->
+        <div class="project-card tilt-card rounded-2xl glass-panel overflow-hidden flex flex-col justify-between" data-category="ml">
+          <div>
+            <div class="h-44 bg-gradient-to-br from-pink-950 via-slate-900 to-purple-950 p-6 flex flex-col justify-between relative overflow-hidden">
+              <div class="flex justify-between items-start z-10">
+                <span class="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-pink-500/20 text-pink-300 border border-pink-500/30">July 2025</span>
+                <span class="text-xs font-mono text-slate-400">Deep Learning & CNN</span>
+              </div>
+              <div class="z-10">
+                <span class="text-xs text-pink-400 font-mono font-medium">Clustering & Neural Networks</span>
+                <h3 class="text-xl font-bold text-white tracking-tight">IPL Stats & Match Telemetry</h3>
+              </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Applied CNNs, regression models, and unsupervised clustering over Indian Premier League player telemetry and ball-by-ball match data to predict match outcomes and cluster player roles.
+              </p>
+
+              <div class="space-y-1.5 pt-2 border-t border-slate-800 text-xs text-slate-400 font-mono">
+                <div>• CNN deep learning feature extraction</div>
+                <div>• K-Means clustering for player profiles</div>
+                <div>• Match score & outcome regression</div>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5 pt-2 text-[11px] font-mono">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-pink-300">Python</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">CNN</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Clustering</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Deep Learning</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0 border-t border-slate-800/80 flex items-center justify-between mt-4">
+            <span class="text-xs font-mono text-slate-400">Deep Learning</span>
+            <a href="#demos" class="text-xs font-bold text-pink-400 hover:text-pink-300 flex items-center gap-1">
+              Explore in Lab &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Bonus Project from Summary: Blind Vision Assistant -->
+        <div class="project-card tilt-card rounded-2xl glass-panel overflow-hidden flex flex-col justify-between" data-category="ml">
+          <div>
+            <div class="h-44 bg-gradient-to-br from-teal-950 via-slate-900 to-cyan-950 p-6 flex flex-col justify-between relative overflow-hidden">
+              <div class="flex justify-between items-start z-10">
+                <span class="px-2.5 py-1 rounded-md text-xs font-mono font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">CV System</span>
+                <span class="text-xs font-mono text-slate-400">Real-Time YOLO</span>
+              </div>
+              <div class="z-10">
+                <span class="text-xs text-cyan-400 font-mono font-medium">Computer Vision</span>
+                <h3 class="text-xl font-bold text-white tracking-tight">Blind Vision Assistant System</h3>
+              </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Computer vision assistance tool using OpenCV and YOLO to detect real-time objects, path obstacles, and provide spatial navigation warnings for visually impaired individuals.
+              </p>
+
+              <div class="space-y-1.5 pt-2 border-t border-slate-800 text-xs text-slate-400 font-mono">
+                <div>• Real-time webcam frame bounding box detection</div>
+                <div>• Obstacle distance calculation & classification</div>
+                <div>• High frame-rate edge inference optimization</div>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5 pt-2 text-[11px] font-mono">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-cyan-300">OpenCV</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">YOLO</span>
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300">Python</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0 border-t border-slate-800/80 flex items-center justify-between mt-4">
+            <span class="text-xs font-mono text-cyan-400">Core Vision Tech</span>
+            <a href="#contact" class="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+              Discuss Architecture &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 3D INTERACTIVE AI ENGINEERING LAB ================= -->
+  <section id="demos" class="py-20 border-t border-slate-800/80 bg-slate-950/60 z-10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mx-auto text-center space-y-3 mb-16">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono text-cyan-400">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+          Direct Proof of Technical Competence
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Interactive AI Engineering Lab</h2>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Interact directly with working mathematical models in your browser: Legal NLP generation, Clinical Trial RCT hypothesis test, and House Price Regression.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- DEMO 1: Legal Assistant NLP Simulator -->
+        <div id="demo-legal" class="p-6 rounded-2xl glass-panel space-y-5 border-t-2 border-cyan-400">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div>
+              <span class="text-[10px] font-mono text-cyan-400 font-bold">PROJECT 1 SIMULATOR</span>
+              <h3 class="text-lg font-bold text-white">Legal Assistant (NLP/GenAI)</h3>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/20 text-cyan-300">Streamlit UI</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <label class="block text-slate-300 font-mono">Select Legal Query Scenario:</label>
+            <select id="legalSelect" onchange="runLegalDemo()" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white font-mono focus:outline-none focus:border-cyan-400 text-xs">
+              <option value="ipc">What is Section 304A under Indian Penal Code?</option>
+              <option value="consumer">What is the claim period under Consumer Protection Act 2019?</option>
+              <option value="contract">What constitutes a breach of contract under Section 39?</option>
+            </select>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-black/60 border border-slate-800 space-y-2 text-xs font-mono">
+            <div class="flex justify-between text-slate-400 text-[11px]">
+              <span>Model Pipeline:</span>
+              <span class="text-cyan-400">Groq/Llama-3 + NLP Extractor</span>
+            </div>
+            <div class="p-2.5 rounded bg-slate-900/80 border-l-2 border-cyan-400 text-slate-200 text-xs leading-relaxed" id="legalAnswer">
+              "Under Section 304A IPC, causing death by negligence (rash act not amounting to culpable homicide) attracts imprisonment up to 2 years or fine."
+            </div>
+            <div class="text-[10px] text-slate-500">Attribution: <span id="legalCite" class="text-cyan-400">IPC Act §304A (Criminal Negligence)</span></div>
+          </div>
+        </div>
+
+        <!-- DEMO 2: Clinical Trial RCT Biostatistics Simulator -->
+        <div id="demo-rct" class="p-6 rounded-2xl glass-panel space-y-5 border-t-2 border-emerald-400">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div>
+              <span class="text-[10px] font-mono text-emerald-400 font-bold">PROJECT 3 SIMULATOR</span>
+              <h3 class="text-lg font-bold text-white">Clinical Trial RCT Analyzer</h3>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300">Biostats</span>
+          </div>
+
+          <div class="space-y-3 text-xs font-mono">
+            <div>
+              <div class="flex justify-between text-slate-400 mb-1">
+                <span>Sample Cohort Size (N):</span>
+                <span id="rctNVal" class="text-white font-bold">1,000</span>
+              </div>
+              <input type="range" min="200" max="5000" step="100" value="1000" id="rctN" oninput="runRctDemo()" class="w-full accent-emerald-400">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-400 mb-1">
+                <span>Control Group Efficacy %:</span>
+                <span id="rctCtrlVal" class="text-white">45%</span>
+              </div>
+              <input type="range" min="10" max="80" step="1" value="45" id="rctCtrl" oninput="runRctDemo()" class="w-full accent-emerald-400">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-400 mb-1">
+                <span>Treatment Group Efficacy %:</span>
+                <span id="rctTrtVal" class="text-emerald-400 font-bold">58%</span>
+              </div>
+              <input type="range" min="10" max="90" step="1" value="58" id="rctTrt" oninput="runRctDemo()" class="w-full accent-emerald-400">
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-black/60 border border-slate-800 space-y-1.5 text-xs font-mono">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Two-Tailed p-value:</span>
+              <span id="rctPVal" class="text-emerald-400 font-bold">&lt; 0.0001</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Therapeutic Lift:</span>
+              <span id="rctLift" class="text-cyan-300 font-bold">+13.0% Absolute</span>
+            </div>
+            <div class="pt-1.5 border-t border-slate-800 text-[11px] text-center font-bold text-emerald-300" id="rctStatus">
+              Statistically Significant (Drug Outperformed Placebo)
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO 3: House Price Prediction Regression Simulator -->
+        <div id="demo-house" class="p-6 rounded-2xl glass-panel space-y-5 border-t-2 border-blue-400">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div>
+              <span class="text-[10px] font-mono text-blue-400 font-bold">PROJECT 4 SIMULATOR</span>
+              <h3 class="text-lg font-bold text-white">House Price Regression</h3>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/20 text-blue-300">Scikit-Learn</span>
+          </div>
+
+          <div class="space-y-3 text-xs font-mono">
+            <div>
+              <label class="block text-slate-400 mb-1">Square Feet Area:</label>
+              <input type="number" id="houseSqft" value="1650" oninput="runHouseDemo()" class="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:outline-none">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-slate-400 mb-1">Bedrooms (BHK):</label>
+                <select id="houseBhk" onchange="runHouseDemo()" class="w-full px-2 py-1.5 rounded bg-slate-900 border border-slate-700 text-white text-xs">
+                  <option value="1">1 BHK</option>
+                  <option value="2">2 BHK</option>
+                  <option value="3" selected>3 BHK</option>
+                  <option value="4">4 BHK</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">Location Tier:</label>
+                <select id="houseLoc" onchange="runHouseDemo()" class="w-full px-2 py-1.5 rounded bg-slate-900 border border-slate-700 text-white text-xs">
+                  <option value="tier1">Tier-1 Metro</option>
+                  <option value="tier2" selected>Tier-2 City</option>
+                  <option value="suburban">Suburban</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-black/60 border border-slate-800 space-y-1.5 text-xs font-mono">
+            <div class="flex justify-between text-slate-400">
+              <span>Predicted Valuation:</span>
+              <span id="housePrice" class="text-blue-400 font-bold text-sm">₹ 68.50 Lakhs</span>
+            </div>
+            <div class="flex justify-between text-slate-500 text-[10px]">
+              <span>R² Validation Metric:</span>
+              <span class="text-emerald-400">0.894 (Scikit-Learn)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= TECHNICAL SKILLS MATRIX (FROM RESUME) ================= -->
+  <section id="skills" class="py-20 border-t border-slate-800/80 z-10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mx-auto text-center space-y-2 mb-16">
+        <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Skill Matrix</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Technical Arsenal</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Category 1: Languages -->
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+            <h3 class="font-bold text-white text-base">Languages</h3>
+          </div>
+          <div class="space-y-2 text-xs font-mono">
+            <div class="flex justify-between p-2 rounded bg-black/40">
+              <span>Python</span>
+              <span class="text-cyan-400 font-bold">Primary</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-black/40">
+              <span>C</span>
+              <span class="text-slate-400">Systems & DSA</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-black/40">
+              <span>SQL</span>
+              <span class="text-slate-400">Data Queries</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category 2: Frameworks & Libraries -->
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+            <h3 class="font-bold text-white text-base">Frameworks</h3>
+          </div>
+          <div class="space-y-1.5 text-xs font-mono">
+            <div class="flex justify-between p-1.5 rounded bg-black/40">
+              <span>TensorFlow & PyTorch</span>
+              <span class="text-blue-400 font-bold">DL</span>
+            </div>
+            <div class="flex justify-between p-1.5 rounded bg-black/40">
+              <span>Scikit-learn</span>
+              <span class="text-blue-400 font-bold">ML</span>
+            </div>
+            <div class="flex justify-between p-1.5 rounded bg-black/40">
+              <span>OpenCV & YOLO</span>
+              <span class="text-cyan-400 font-bold">Vision</span>
+            </div>
+            <div class="flex justify-between p-1.5 rounded bg-black/40">
+              <span>FastAPI & Streamlit</span>
+              <span class="text-slate-300">APIs & UI</span>
+            </div>
+            <div class="flex justify-between p-1.5 rounded bg-black/40">
+              <span>Pandas, NumPy, Seaborn</span>
+              <span class="text-slate-300">EDA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category 3: Cloud & GenAI -->
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+            <h3 class="font-bold text-white text-base">Cloud & GenAI</h3>
+          </div>
+          <div class="space-y-2 text-xs font-mono">
+            <div class="flex justify-between p-2 rounded bg-black/40">
+              <span>OpenAI API</span>
+              <span class="text-purple-400 font-bold">LLMs</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-black/40">
+              <span>Groq</span>
+              <span class="text-purple-400 font-bold">Ultra-fast Inference</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-black/40">
+              <span>Claude & Claude Code</span>
+              <span class="text-slate-300">Agentic AI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category 4: DevTools -->
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-pink-400"></span>
+            <h3 class="font-bold text-white text-base">DevTools</h3>
+          </div>
+          <div class="space-y-2 text-xs font-mono">
+            <div class="flex justify-between p-2 rounded bg-black/40">
+              <span>Git & GitHub</span>
+              <span class="text-pink-400 font-bold">Version Control</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-black/40">
+              <span>VS Code & Cursor</span>
+              <span class="text-slate-300">Primary IDE</span>
+            </div>
+            <div class="flex justify-between p-2 rounded bg-black/40">
+              <span>Canva</span>
+              <span class="text-slate-400">Design</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= HACKATHON ACHIEVEMENTS ================= -->
+  <section id="achievements" class="py-20 border-t border-slate-800/80 bg-slate-950/40 z-10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mx-auto text-center space-y-3 mb-16">
+        <span class="text-xs font-mono font-bold tracking-widest text-pink-400 uppercase">Competitive Record</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Hackathons & Achievements</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        
+        <!-- Hackathon 1 -->
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-3 border border-pink-500/30 glow-purple">
+          <div class="flex justify-between items-start">
+            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-pink-500/20 text-pink-300 border border-pink-500/40">National Level</span>
+            <span class="text-xs font-mono text-slate-400">36-Hours Sprint</span>
+          </div>
+          <h3 class="text-xl font-bold text-white">Hackindia Spark-9 2025</h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Selected participant in the 36-hour non-stop national hackathon. Collaborated under high-pressure constraints to prototype and pitch innovative AI solutions.
+          </p>
+        </div>
+
+        <!-- Hackathon 2 -->
+        <div class="tilt-card p-6 rounded-2xl glass-panel space-y-3 border border-cyan-500/30 glow-cyan">
+          <div class="flex justify-between items-start">
+            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">National Level</span>
+            <span class="text-xs font-mono text-slate-400">36-Hours Sprint</span>
+          </div>
+          <h3 class="text-xl font-bold text-white">AI Innovation Hackathon by Unstop</h3>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Participant in Unstop's 36-hour National AI Innovation challenge, building prototype AI tools leveraging modern LLM and predictive frameworks.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= CONTACT & CONNECT ================= -->
+  <section id="contact" class="py-20 border-t border-slate-800/80 z-10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-4xl mx-auto rounded-3xl glass-panel p-8 sm:p-12 shadow-2xl relative overflow-hidden border border-cyan-500/30">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          
+          <div class="space-y-4">
+            <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Direct Channel</span>
+            <h2 class="text-3xl font-extrabold text-white tracking-tight">Let's Discuss AI Opportunities</h2>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              I am actively seeking full-time AI/ML Developer roles, Computer Vision projects, and high-impact internships.
+            </p>
+
+            <div class="pt-2 space-y-2 text-xs font-mono text-slate-400">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <span class="text-white font-semibold select-all">deepaksrathore08@gmail.com</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                <span class="text-white font-semibold">+91-8079085251</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span>Quantum University, Roorkee • Alwar, India</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message Form -->
+          <form onsubmit="handleContact(event)" class="p-6 rounded-2xl bg-black/60 border border-slate-800 space-y-3">
+            <div class="text-xs font-mono font-bold text-slate-400 pb-1 border-b border-slate-800">Quick Recruiter Dispatch</div>
+            
+            <div>
+              <label class="block text-[11px] font-mono text-slate-400 mb-1">Your Name & Company</label>
+              <input type="text" id="cName" required placeholder="e.g. Alex Rivera / Tech Recruiter" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-400">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-mono text-slate-400 mb-1">Your Email</label>
+              <input type="email" id="cEmail" required placeholder="alex@company.com" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-400">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-mono text-slate-400 mb-1">Role / Message</label>
+              <textarea id="cMsg" rows="3" required placeholder="Hi Deepak, we came across your AI portfolio and would like to discuss an AI/ML opportunity..." class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-400"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-heading font-extrabold text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2">
+              <span>Send Message</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="py-10 border-t border-slate-800 text-slate-500 text-xs text-center z-10 relative no-print">
+    <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <p class="text-white font-medium">Deepak Singh Rathore • AI & Machine Learning Developer</p>
+      <p class="font-mono text-slate-400 text-[11px]">B.Tech CS @ Quantum University • Samatrix25 • Internshala</p>
+      <p class="text-slate-600 text-[11px]">Deployable Static Architecture • © 2026 Deepak Singh Rathore</p>
+    </div>
+  </footer>
+
+  <!-- ================= COMMAND PALETTE (Ctrl+K) ================= -->
+  <div id="commandPalette" class="fixed inset-0 z-50 hidden flex items-start justify-center pt-24 px-4 bg-slate-950/80 backdrop-blur-md no-print">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-4 shadow-2xl space-y-3">
+      <div class="flex items-center gap-3 px-3 py-2 rounded-xl bg-black border border-slate-800">
+        <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="palInput" placeholder="Jump to projects, live demos, skills, contact..." oninput="filterPalette()" class="w-full bg-transparent text-sm text-white focus:outline-none font-mono">
+        <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-slate-400">ESC</kbd>
+      </div>
+      
+      <div id="palItems" class="space-y-1 text-xs font-mono max-h-72 overflow-y-auto">
+        <a href="#projects" onclick="toggleCommandPalette()" class="flex justify-between p-2.5 rounded-lg hover:bg-slate-800 text-slate-200">
+          <span>Projects (Legal AI, Indian Election, RCT, House Price, IPL)</span>
+          <span class="text-cyan-400">Jump &rarr;</span>
+        </a>
+        <a href="#demo-legal" onclick="toggleCommandPalette()" class="flex justify-between p-2.5 rounded-lg hover:bg-slate-800 text-slate-200">
+          <span>Legal Assistant NLP Simulator</span>
+          <span class="text-cyan-400">Demo &rarr;</span>
+        </a>
+        <a href="#demo-rct" onclick="toggleCommandPalette()" class="flex justify-between p-2.5 rounded-lg hover:bg-slate-800 text-slate-200">
+          <span>Clinical Trial RCT Analyzer</span>
+          <span class="text-emerald-400">Demo &rarr;</span>
+        </a>
+        <a href="#demo-house" onclick="toggleCommandPalette()" class="flex justify-between p-2.5 rounded-lg hover:bg-slate-800 text-slate-200">
+          <span>House Price Prediction Regression Simulator</span>
+          <span class="text-blue-400">Demo &rarr;</span>
+        </a>
+        <a href="#experience" onclick="toggleCommandPalette()" class="flex justify-between p-2.5 rounded-lg hover:bg-slate-800 text-slate-200">
+          <span>Internship Experience (Samatrix25 & Internshala)</span>
+          <span class="text-slate-400">Jump &rarr;</span>
+        </a>
+        <a href="#achievements" onclick="toggleCommandPalette()" class="flex justify-between p-2.5 rounded-lg hover:bg-slate-800 text-slate-200">
+          <span>Hackathons (Hackindia Spark-9 & Unstop)</span>
+          <span class="text-pink-400">Jump &rarr;</span>
+        </a>
+        <button onclick="copyEmail(); toggleCommandPalette()" class="w-full flex justify-between p-2.5 rounded-lg hover:bg-slate-800 text-slate-200 text-left">
+          <span>Copy Email Address (deepaksrathore08@gmail.com)</span>
+          <span class="text-cyan-400">Copy &rarr;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 hidden px-4 py-3 rounded-xl bg-cyan-500 text-black text-xs font-mono font-bold shadow-2xl flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    <span id="toastMsg">Action Successful</span>
+  </div>
+
+  <!-- ================= THREE.JS 3D CANVAS SCRIPT ================= -->
+  <script>
+    // Three.js 3D Interactive Cyber Neural Network
+    (function init3D() {
+      const container = document.getElementById('canvas3d');
+      if (!container) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
+      camera.position.z = 240;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      // Create Particle Constellation / Neural Nodes
+      const particleCount = 200;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const velocities = [];
+
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 600;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 600;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 300;
+        velocities.push({
+          x: (Math.random() - 0.5) * 0.4,
+          y: (Math.random() - 0.5) * 0.4,
+          z: (Math.random() - 0.5) * 0.4
+        });
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const pMaterial = new THREE.PointsMaterial({
+        color: 0x00f0ff,
+        size: 3.5,
+        transparent: true,
+        opacity: 0.75,
+        blending: THREE.AdditiveBlending
+      });
+
+      const particleSystem = new THREE.Points(geometry, pMaterial);
+      scene.add(particleSystem);
+
+      // Rotating 3D Wireframe Icosahedron (AI Core)
+      const coreGeo = new THREE.IcosahedronGeometry(75, 1);
+      const coreMat = new THREE.MeshBasicMaterial({
+        color: 0x8a2be2,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.2
+      });
+      const aiCore = new THREE.Mesh(coreGeo, coreMat);
+      aiCore.position.set(160, 20, -50);
+      scene.add(aiCore);
+
+      // Mouse Parallax Interaction
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX - window.innerWidth / 2) * 0.05;
+        mouseY = (e.clientY - window.innerHeight / 2) * 0.05;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Rotate AI Core
+        aiCore.rotation.x += 0.003;
+        aiCore.rotation.y += 0.005;
+
+        // Animate particles
+        const pos = particleSystem.geometry.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+          pos[i * 3] += velocities[i].x;
+          pos[i * 3 + 1] += velocities[i].y;
+          pos[i * 3 + 2] += velocities[i].z;
+
+          // Boundary bounce
+          if (pos[i * 3] < -300 || pos[i * 3] > 300) velocities[i].x *= -1;
+          if (pos[i * 3 + 1] < -300 || pos[i * 3 + 1] > 300) velocities[i].y *= -1;
+          if (pos[i * 3 + 2] < -150 || pos[i * 3 + 2] > 150) velocities[i].z *= -1;
+        }
+        particleSystem.geometry.attributes.position.needsUpdate = true;
+
+        // Camera smoothing with mouse
+        camera.position.x += (mouseX - camera.position.x) * 0.05;
+        camera.position.y += (-mouseY - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    })();
+
+    // 3D Tilt Card Interaction
+    document.querySelectorAll('.tilt-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const dx = (x - cx) / cx;
+        const dy = (y - cy) / cy;
+        card.style.transform = `perspective(1000px) rotateX(${-dy * 8}deg) rotateY(${dx * 8}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      });
+    });
+
+    // Live IST Clock
+    function updateClock() {
+      const now = new Date();
+      const options = { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      const timeStr = now.toLocaleTimeString('en-US', options);
+      const clockEl = document.getElementById('liveClock');
+      if (clockEl) clockEl.textContent = `IST ${timeStr} (UTC+5:30)`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Scroll Progress
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      const bar = document.getElementById('progressBar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    // Mobile menu toggle
+    const mobBtn = document.getElementById('mobileBtn');
+    const mobMenu = document.getElementById('mobileMenu');
+    mobBtn.addEventListener('click', () => {
+      mobMenu.classList.toggle('hidden');
+    });
+
+    // Filter projects
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('bg-cyan-500', 'text-black');
+          b.classList.add('bg-slate-800', 'text-slate-300');
+        });
+        btn.classList.add('bg-cyan-500', 'text-black');
+        btn.classList.remove('bg-slate-800', 'text-slate-300');
+
+        const filter = btn.getAttribute('data-filter');
+        projectCards.forEach(c => {
+          if (filter === 'all' || c.getAttribute('data-category') === filter) {
+            c.style.display = 'flex';
+          } else {
+            c.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Command Palette
+    function toggleCommandPalette() {
+      const p = document.getElementById('commandPalette');
+      p.classList.toggle('hidden');
+      if (!p.classList.contains('hidden')) {
+        document.getElementById('palInput').focus();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        toggleCommandPalette();
+      }
+      if (e.key === 'Escape') {
+        const p = document.getElementById('commandPalette');
+        if (!p.classList.contains('hidden')) p.classList.add('hidden');
+      }
+    });
+
+    function filterPalette() {
+      const q = document.getElementById('palInput').value.toLowerCase();
+      document.querySelectorAll('#palItems a, #palItems button').forEach(item => {
+        item.style.display = item.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    // Toast helper
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      const tm = document.getElementById('toastMsg');
+      tm.textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 2500);
+    }
+
+    // Copy Email
+    function copyEmail() {
+      navigator.clipboard.writeText('deepaksrathore08@gmail.com').then(() => {
+        showToast('Email deepaksrathore08@gmail.com copied!');
+        const s = document.getElementById('copyStatus');
+        if (s) {
+          s.textContent = 'Copied!';
+          setTimeout(() => s.textContent = 'Copy Email', 2000);
+        }
+      });
+    }
+
+    // Contact Form
+    function handleContact(e) {
+      e.preventDefault();
+      const n = document.getElementById('cName').value;
+      const em = document.getElementById('cEmail').value;
+      const m = document.getElementById('cMsg').value;
+
+      showToast(`Thank you ${n}! Opening mail client...`);
+      setTimeout(() => {
+        window.location.href = `mailto:deepaksrathore08@gmail.com?subject=Opportunity from ${encodeURIComponent(n)}&body=${encodeURIComponent(m + '
+
+Sender Email: ' + em)}`;
+      }, 700);
+    }
+
+    // Interactive Demo 1: Legal Assistant
+    const legalData = {
+      ipc: {
+        ans: "Under Section 304A IPC, causing death by negligence (rash act not amounting to culpable homicide) attracts imprisonment up to 2 years or fine.",
+        cite: "IPC Act §304A (Criminal Negligence)"
+      },
+      consumer: {
+        ans: "Under Section 69 of Consumer Protection Act 2019, the statutory limitation period to admit a consumer complaint is 2 years from the date the cause of action arose.",
+        cite: "Consumer Protection Act 2019 §69 (Limitation Period)"
+      },
+      contract: {
+        ans: "Under Section 39 of the Indian Contract Act 1872, repudiating or disabling oneself from performing a contract allows the other party to terminate and claim damages under §73.",
+        cite: "Indian Contract Act 1872 §39, §73"
+      }
+    };
+    function runLegalDemo() {
+      const k = document.getElementById('legalSelect').value;
+      const d = legalData[k];
+      if (d) {
+        document.getElementById('legalAnswer').textContent = `"${d.ans}"`;
+        document.getElementById('legalCite').textContent = d.cite;
+      }
+    }
+
+    // Interactive Demo 2: RCT Biostatistics
+    function runRctDemo() {
+      const n = parseInt(document.getElementById('rctN').value);
+      const c = parseInt(document.getElementById('rctCtrl').value) / 100;
+      const t = parseInt(document.getElementById('rctTrt').value) / 100;
+
+      document.getElementById('rctNVal').textContent = n.toLocaleString();
+      document.getElementById('rctCtrlVal').textContent = Math.round(c * 100) + '%';
+      document.getElementById('rctTrtVal').textContent = Math.round(t * 100) + '%';
+
+      const pPool = (c + t) / 2;
+      const se = Math.sqrt(pPool * (1 - pPool) * (2 / (n / 2)));
+      const z = (t - c) / se;
+      const lift = Math.round((t - c) * 100);
+
+      document.getElementById('rctLift').textContent = (lift > 0 ? '+' : '') + lift + '% Absolute';
+
+      if (Math.abs(z) > 1.96) {
+        document.getElementById('rctPVal').textContent = '< 0.0001 (p < 0.05)';
+        document.getElementById('rctStatus').textContent = 'Statistically Significant (Drug Outperformed Placebo)';
+        document.getElementById('rctStatus').className = 'pt-1.5 border-t border-slate-800 text-[11px] text-center font-bold text-emerald-400';
+      } else {
+        document.getElementById('rctPVal').textContent = '0.142 (Not Significant)';
+        document.getElementById('rctStatus').textContent = 'Inconclusive (Difference due to sample variation)';
+        document.getElementById('rctStatus').className = 'pt-1.5 border-t border-slate-800 text-[11px] text-center font-bold text-amber-400';
+      }
+    }
+
+    // Interactive Demo 3: House Price Prediction
+    function runHouseDemo() {
+      const sqft = parseFloat(document.getElementById('houseSqft').value) || 1200;
+      const bhk = parseInt(document.getElementById('houseBhk').value);
+      const loc = document.getElementById('houseLoc').value;
+
+      let baseRate = 3800; // per sq ft
+      if (loc === 'tier1') baseRate = 6500;
+      if (loc === 'suburban') baseRate = 2600;
+
+      const price = (sqft * baseRate + bhk * 250000) / 100000;
+      document.getElementById('housePrice').textContent = `₹ ${price.toFixed(2)} Lakhs`;
+    }
+  </script>
+</body>
+</html>
